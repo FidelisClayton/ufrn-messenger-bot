@@ -1,6 +1,8 @@
-import express from 'express'
-import axios from 'axios'
-import bodyParser from 'body-parser'
+"use strict"
+
+const express = require('express')
+const axios = require('axios')
+const bodyParser = require('body-parser')
 
 const app = express()
 
@@ -14,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/webhook/', (req, res) => {
-  if(req.query['hub.verify_token'] === "") {
+  if(req.query['hub.verify_token'] === process.env.MESSENGER_TOKEN) {
     res.send(req.query['hub.challenge'])
   }
 
