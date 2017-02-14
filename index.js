@@ -11,7 +11,11 @@ import {
 } from './services/api-ai'
 
 import { sendText  } from './services/facebook'
-import { selectBus } from './messages/postbacks'
+import { getStopPrediction } from './services/cittamobi'
+import {
+  sendBusStops,
+  sendBusPredictions
+} from './messages/postbacks'
 
 import {
   button as buttonTemplate,
@@ -24,6 +28,8 @@ import {
   urlButton,
   postbackButton
 } from './helpers/buttons'
+
+import element from './helpers/elements'
 
 const app = express()
 const tokens = {
@@ -57,23 +63,32 @@ app.post('/webhook/', (req, res) => {
     if(event.message && event.message.text) {
       let text = event.message.text
 
+
+      // getStopPrediction(3854782)
+      //   .then(res => sendBusPredictions(res, sender))
+      //   .catch(err => console.log(err))
+
       textRequest(text)
         .then(res => {
           switch(res.action) {
             case NEXT_BUS:
+              console.log(NEXT_BUS)
+
               sendText(textMessage({
                 text: res.speech,
                 senderId: sender
               }))
 
-              sendText(selectBus(event))
+              sendBusStops(event, 0)
               break
             case BUS_LOCAL:
               console.log(BUS_LOCAL)
+
               sendText(selectBus(event))
               break
             default:
               console.log("FALLBACK")
+
               sendText(textMessage({
                 text: res.speech,
                 senderId: sender
@@ -84,15 +99,28 @@ app.post('/webhook/', (req, res) => {
     }
 
     if(event.postback) {
+      console.log(event.postback)
       switch(event.postback.payload) {
         case "ONIBUS":
           sendText(selectBus(event), tokens.ai)
+        default:
+          const action = event.postback.payload.split("[")[0]
+          const actionData = event.postback.payload.split("[")[1].split("]")[0]
+
+          switch(action) {
+            case "STOP_LIST_PAGE":
+              sendBusStops(event, actionData)
+              break
+            default:
+              break
+          }
       }
     }
   })
 
   res.sendStatus(200)
 })
+
 
 app.listen(app.get('port'), () => {
   console.log(`App running on port ${app.get('port')}`)

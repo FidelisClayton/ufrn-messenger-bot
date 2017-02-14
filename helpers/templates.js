@@ -37,14 +37,21 @@ export function generic({ senderId, elements }) {
         type: "template",
         payload:{
           template_type: "generic",
-          elements: elements
+          elements: elements,
+          buttons: [
+            {
+              type: "postback",
+              payload: "vem",
+              title: "Opa"
+            }
+          ]
         }
       }
     }
   }
 }
 
-export function list({ senderId, elements, buttons }) {
+export function list({ senderId, elements, buttons, topElement = "large" }) {
   return {
     recipient: {
       id: senderId
@@ -55,7 +62,8 @@ export function list({ senderId, elements, buttons }) {
         payload: {
           template_type: "list",
           elements: elements,
-          buttons: buttons
+          buttons: buttons,
+          top_element_style: topElement
         }
       }
     }
