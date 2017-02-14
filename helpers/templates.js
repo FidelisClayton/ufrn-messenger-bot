@@ -1,3 +1,14 @@
+export function text({senderId, text}) {
+  return {
+    recipient: {
+      id: senderId
+    },
+    message: {
+      text
+    }
+  }
+}
+
 export function button({ senderId, text, buttons = [] }) {
   return {
     recipient: {

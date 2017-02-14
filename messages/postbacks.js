@@ -34,19 +34,8 @@ export function selectBus(event) {
   })
   .filter(stop => !!stop)
 
-  const payload = genericTemplate({
+  return genericTemplate({
     senderId: event.sender.id,
     elements
   })
-
-  console.log(JSON.stringify(payload))
-
-  axios.post("https://graph.facebook.com/v2.6/me/messages", payload, {
-    params: {
-      access_token: process.env.MESSENGER_TOKEN
-    }
-  })
-  .then(res => console.log("RESPONSE: ", JSON.stringify(res.data)))
-  .catch(err => console.log(err))
-
 }

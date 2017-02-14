@@ -2,12 +2,22 @@ import express from 'express'
 import axios from 'axios'
 import bodyParser from 'body-parser'
 
+import {
+  textRequest,
+  BUS_LOCAL,
+  BUS_ACTION_PLACE,
+  BUS_IN_PLACE,
+  NEXT_BUS
+} from './services/api-ai'
+
+import { sendText  } from './services/facebook'
 import { selectBus } from './messages/postbacks'
 
 import {
   button as buttonTemplate,
   generic as genericTemplate,
-  list as listTemplate
+  list as listTemplate,
+  text as textMessage
 } from './helpers/templates'
 
 import {
@@ -16,6 +26,10 @@ import {
 } from './helpers/buttons'
 
 const app = express()
+const tokens = {
+  fb: process.env.MESSENGER_TOKEN,
+  ai: process.env.API_AI_CLIENT_TOKEN
+}
 
 app.set('port', (process.env.PORT || 3000))
 
@@ -43,46 +57,42 @@ app.post('/webhook/', (req, res) => {
     if(event.message && event.message.text) {
       let text = event.message.text
 
-      var template = buttonTemplate({
-        senderId: sender,
-        text: "O que deseja fazer?",
-        buttons: [
-          postbackButton({
-            payload: "RESTAURANTE",
-            title: "RU"
-          }),
-          postbackButton({
-            payload: "ONIBUS",
-            title: "Ônibus"
-          })
-        ]
-      })
+      textRequest(text)
+        .then(res => {
+          switch(res.action) {
+            case NEXT_BUS:
+              sendText(textMessage({
+                text: res.speech,
+                senderId: sender
+              }))
 
-      if(text === "Circular") {
-        sendText(template)
-      }
+              sendText(selectBus(event))
+              break
+            case BUS_LOCAL:
+              console.log(BUS_LOCAL)
+              sendText(selectBus(event))
+              break
+            default:
+              console.log("FALLBACK")
+              sendText(textMessage({
+                text: res.speech,
+                senderId: sender
+              }))
+              break
+          }
+        })
     }
 
     if(event.postback) {
       switch(event.postback.payload) {
         case "ONIBUS":
-          selectBus(event)
+          sendText(selectBus(event), tokens.ai)
       }
     }
   })
 
   res.sendStatus(200)
 })
-
-export function sendText(data) {
-  axios.post("https://graph.facebook.com/v2.6/me/messages", data, {
-    params: {
-      access_token: process.env.MESSENGER_TOKEN
-    }
-  })
-  .then(res => console.log("RESPONSE: ", JSON.stringify(res.data)))
-  // .catch(err => console.log("ERROR: ", console.log(err)))
-}
 
 app.listen(app.get('port'), () => {
   console.log(`App running on port ${app.get('port')}`)
