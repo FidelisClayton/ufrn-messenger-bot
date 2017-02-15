@@ -5,7 +5,7 @@ import busStops from '../data/bus-stops'
 export const CITTAMOBI_ENDPOINT = "http://api.plataforma.cittati.com.br"
 
 export function selectBusStopById(stopId) {
-  return busStops.filter(busStop => busStop.stopId === stopId)[0]
+  return busStops.filter(busStop => busStop.stopId === Number(stopId))[0]
 }
 
 const filterArrival = service => service.predictionType === "ARRIVAL"

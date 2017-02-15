@@ -29,6 +29,8 @@ import {
   postbackButton
 } from './helpers/buttons'
 
+import { selectBusStopById } from './helpers/functions'
+
 import element from './helpers/elements'
 
 const app = express()
@@ -64,9 +66,7 @@ app.post('/webhook/', (req, res) => {
       let text = event.message.text
 
 
-      // getStopPrediction(3854782)
-      //   .then(res => sendBusPredictions(res, sender))
-      //   .catch(err => console.log(err))
+      console.log(event)
 
       textRequest(text)
         .then(res => {
@@ -110,6 +110,13 @@ app.post('/webhook/', (req, res) => {
           switch(action) {
             case "STOP_LIST_PAGE":
               sendBusStops(event, actionData)
+              break
+
+            case "SELECT_BUS_STOP":
+              getStopPrediction(actionData)
+                .then(res => sendBusPredictions(res, sender))
+                .catch(err => console.log(err))
+
               break
             default:
               break

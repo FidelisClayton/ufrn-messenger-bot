@@ -37,14 +37,7 @@ export function generic({ senderId, elements }) {
         type: "template",
         payload:{
           template_type: "generic",
-          elements: elements,
-          buttons: [
-            {
-              type: "postback",
-              payload: "vem",
-              title: "Opa"
-            }
-          ]
+          elements: elements
         }
       }
     }

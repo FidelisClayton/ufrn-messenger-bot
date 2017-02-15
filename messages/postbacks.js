@@ -35,8 +35,8 @@ export async function sendBusStops(event, page) {
         image_url: stop.image,
         buttons: [
           postbackButton({
-            payload: `BUS_STOP[${stop.stopId}]`,
-            title: "Selecionar"
+            payload: `SELECT_BUS_STOP[${stop.stopId}]`,
+            title: stop.title
           })
         ]
       }))
@@ -52,10 +52,10 @@ export async function sendBusStops(event, page) {
     elements: messages[page]
   }))
 
-  if(page < messages.length - 1)
-    sendText(buttonTemplate({
+  if(Number(page) < messages.length1) {
+    let pages = await sendText(buttonTemplate({
       senderId: event.sender.id,
-      text: "Gostaria de ver mais pontos de ônibus?",
+      text: "Tem outras paradas, deseja ver?",
       buttons: [
         postbackButton({
           payload: `STOP_LIST_PAGE[${nextPage}]`,
@@ -63,6 +63,9 @@ export async function sendBusStops(event, page) {
         })
       ]
     }))
+    console.log(pages)
+  }
+
 }
 
 export async function sendBusPredictions({ busStop, arrival, departure }, sender) {
@@ -95,17 +98,9 @@ export async function sendBusPredictions({ busStop, arrival, departure }, sender
     ]
   }))
 
-  console.log(listTemplate({
+  await sendText(listTemplate({
       senderId: sender,
       elements: departureElements.filter(element => !!element),
       topElement: "compact"
   }))
-
-  const message2 = await sendText(listTemplate({
-      senderId: sender,
-      elements: departureElements.filter(element => !!element),
-      topElement: "compact"
-  }))
-
-  console.log(message2)
 }
