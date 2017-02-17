@@ -87,7 +87,7 @@ export async function sendBusPredictions({ busStop, arrival, departure }, sender
     }
   })
 
-  await sendText(listTemplate({
+  let list1 = await sendText(listTemplate({
     senderId: sender,
     elements: [
       {
@@ -98,9 +98,13 @@ export async function sendBusPredictions({ busStop, arrival, departure }, sender
     ]
   }))
 
-  await sendText(listTemplate({
+  console.log(list1)
+
+  let list2 = await sendText(listTemplate({
       senderId: sender,
       elements: departureElements.filter(element => !!element),
       topElement: "compact"
   }))
+
+  console.log(list2)
 }

@@ -29,9 +29,13 @@ import {
   postbackButton
 } from './helpers/buttons'
 
-import { selectBusStopById } from './helpers/functions'
+import {
+  selectBusStopById,
+  selectBusStopByName
+} from './helpers/functions'
 
 import element from './helpers/elements'
+import busStops from './data/bus-stops'
 
 const app = express()
 const tokens = {
@@ -39,7 +43,7 @@ const tokens = {
   ai: process.env.API_AI_CLIENT_TOKEN
 }
 
-app.set('port', (process.env.PORT || 3000))
+app.set('port', (process.env.PORT || 5000))
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -66,10 +70,9 @@ app.post('/webhook/', (req, res) => {
       let text = event.message.text
 
 
-      console.log(event)
-
       textRequest(text)
         .then(res => {
+          console.log(res)
           switch(res.action) {
             case NEXT_BUS:
               console.log(NEXT_BUS)
@@ -85,6 +88,40 @@ app.post('/webhook/', (req, res) => {
               console.log(BUS_LOCAL)
 
               sendText(selectBus(event))
+              break
+            case BUS_IN_PLACE:
+              sendText(textMessage({
+                text: "Um momento, vou verificar.",
+                senderId: sender
+              }))
+
+              const { locais } = res.parameters
+              console.log(BUS_IN_PLACE)
+
+              const selectedStops = selectBusStopByName(locais, busStops)
+
+              selectedStops.forEach(async function(busStop) {
+                const stopPrediction = await getStopPrediction(busStop.stopId)
+
+                // await sendText(textMessage({
+                //   text: res.speech,
+                //   senderId: sender
+                // }))
+
+                console.log(stopPrediction)
+
+                if(stopPrediction.arrival.length > 1 || stopPrediction.departure.length > 1) {
+                  console.log("================== SEND BUS =========")
+                  sendBusPrediction(stopPrediction, sender)
+                } else {
+                  console.log("============== N VAI DAR N ============")
+                  sendText(textMessage({
+                    text: "Hmmm, parece que não tem mais ônibus...",
+                    senderId: sender
+                  }))
+                }
+              })
+
               break
             default:
               console.log("FALLBACK")
