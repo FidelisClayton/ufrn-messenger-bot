@@ -1,21 +1,21 @@
 import axios from 'axios'
 
-import { sendText } from '../services/facebook'
+import { sendText } from '../api'
 
 import {
-  list as listTemplate,
-  button as buttonTemplate,
-  generic as genericTemplate
-} from '../helpers/templates'
+  listTemplate,
+  buttonTemplate,
+  genericTemplate,
+  postbackButton,
+  element
+} from '../components'
 
-import { postbackButton } from '../helpers/buttons'
+import {
+  SELECT_BUS,
+  SELECT_RESTAURANT
+} from '../constants'
 
-import element from '../helpers/elements'
-
-import busStops from '../data/bus-stops'
-
-export const SELECT_BUS = "SELECT_BUS"
-export const SELECT_RESTAURANT = "SELECT_RESTAURANT"
+import busStops from '../../data/bus-stops'
 
 export async function sendBusStops(event, page) {
   const nextPage = Number(page) + 1
@@ -24,6 +24,7 @@ export async function sendBusStops(event, page) {
   let message = []
 
   busStops.map((stop, index) => {
+    const { title, image } = stop
     const mod = index % 5
 
     if(message.length === 5)
@@ -31,12 +32,12 @@ export async function sendBusStops(event, page) {
 
     if(mod < 5) {
       message.push(element({
-        title: stop.title,
-        image_url: stop.image,
+        title,
+        image_url: image,
         buttons: [
           postbackButton({
             payload: `SELECT_BUS_STOP[${stop.stopId}]`,
-            title: stop.title
+            title
           })
         ]
       }))
@@ -52,8 +53,8 @@ export async function sendBusStops(event, page) {
     elements: messages[page]
   }))
 
-  if(Number(page) < messages.length1) {
-    let pages = await sendText(buttonTemplate({
+  if(Number(page) < messages.length) {
+    sendText(buttonTemplate({
       senderId: event.sender.id,
       text: "Tem outras paradas, deseja ver?",
       buttons: [
@@ -63,13 +64,12 @@ export async function sendBusStops(event, page) {
         })
       ]
     }))
-    console.log(pages)
   }
-
 }
 
-export async function sendBusPredictions({ busStop, arrival, departure }, sender) {
-  const arrivalElements = arrival.map((vehicle, index) => {
+export async function sendBusPredictions(res, sender) {
+  const { busStop, arrival, departure } = res
+  const arrivalElements = arrival.map((vehicle, index, array) => {
     if(index < 3) {
       return {
         title: vehicle.routeMnemonic,
@@ -78,7 +78,12 @@ export async function sendBusPredictions({ busStop, arrival, departure }, sender
     }
   })
 
-  const departureElements = departure.map((vehicle, index) => {
+  if(arrivalElements.length === 1)
+    arrivalElements.push({
+      title: "Apenas 1 veiculo disponivel"
+    })
+
+  const departureElements = departure.map((vehicle, index, array) => {
     if(index < 4) {
       return {
         title: vehicle.routeMnemonic,
@@ -98,13 +103,9 @@ export async function sendBusPredictions({ busStop, arrival, departure }, sender
     ]
   }))
 
-  console.log(list1)
-
   let list2 = await sendText(listTemplate({
       senderId: sender,
       elements: departureElements.filter(element => !!element),
       topElement: "compact"
   }))
-
-  console.log(list2)
 }

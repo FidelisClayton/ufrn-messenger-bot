@@ -1,0 +1,9 @@
+export const BUS_LOCAL = 'BUS_LOCAL'
+export const BUS_ACTION_PLACE = 'BUS_ACTION_PLACE'
+export const BUS_IN_PLACE = 'BUS_IN_PLACE'
+export const NEXT_BUS = 'NEXT_BUS'
+export const SELECT_BUS = 'SELECT_BUS'
+export const SELECT_RESTAURANT = 'SELECT_RESTAURANT'
+export const ONIBUS = "ONIBUS"
+export const STOP_LIST_PAGE = "STOP_LIST_PAGE"
+export const SELECT_BUS_STOP = "SELECT_BUS_STOP"
