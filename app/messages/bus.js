@@ -2,62 +2,45 @@ import { sendText } from '../api'
 
 import {
   listTemplate,
-  buttonTemplate,
-  genericTemplate,
-  postbackButton,
-  element
+  quickReplyTemplate,
+  quickReply
 } from '../components'
+
+import {
+  REMAINING_BUS_STOPS,
+  MAX_QUICK_REPLIES,
+  SELECT_BUS_STOP
+} from '../constants'
 
 import busStops from '../../data/bus-stops'
 
-export async function sendBusStops(event, page) {
-  const nextPage = Number(page) + 1
-
-  let messages = []
-  let message = []
-
-  busStops.map((stop, index) => {
-    const { title, image } = stop
-    const mod = index % 5
-
-    if(message.length === 5)
-      message = []
-
-    if(mod < 5) {
-      message.push(element({
+export function sendBusStops(event, offset = 0) {
+  const quickReplies = busStops.reduce((previous, { title, stopId }, index) => {
+    if (index >= offset && previous.length < MAX_QUICK_REPLIES - 1) {
+      previous.push(quickReply({
         title,
-        image_url: image,
-        buttons: [
-          postbackButton({
-            payload: `SELECT_BUS_STOP[${stop.stopId}]`,
-            title
-          })
-        ]
+        payload: `${SELECT_BUS_STOP}-${stopId}`
       }))
     }
 
-    if(mod === 1) {
-      messages.push(message)
-    }
+    return previous
+  }, [])
+
+  if (quickReplies.length === MAX_QUICK_REPLIES - 1)
+    quickReplies.push(quickReply({
+      title: 'Outras',
+      payload: REMAINING_BUS_STOPS
+    }))
+
+  const messageBody = quickReplyTemplate({
+    senderId: event.sender.id,
+    text: 'Escolha a parada que você quer pegar o ônibus',
+    quickReplies
   })
 
-  await sendText(genericTemplate({
-    senderId: event.sender.id,
-    elements: messages[page]
-  }))
-
-  if(Number(page) < messages.length) {
-    sendText(buttonTemplate({
-      senderId: event.sender.id,
-      text: 'Tem outras paradas, deseja ver?',
-      buttons: [
-        postbackButton({
-          payload: `STOP_LIST_PAGE[${nextPage}]`,
-          title: 'Ver mais'
-        })
-      ]
-    }))
-  }
+  return sendText(messageBody)
+    .then(res => res)
+    .catch(err => err)
 }
 
 export async function sendBusPredictions(res, sender) {

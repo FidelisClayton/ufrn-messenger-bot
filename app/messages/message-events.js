@@ -1,3 +1,5 @@
+import log from 'better-log'
+
 import {
   NEXT_BUS,
   BUS_LOCAL,
@@ -29,12 +31,7 @@ export default ({action, speech, parameters}, event, senderId) => {
 
   switch(action) {
     case NEXT_BUS: {
-      sendText(textTemplate({
-        text: speech,
-        senderId
-      }))
-
-      sendBusStops(event, 0)
+      sendBusStops(event)
       break
     }
 
@@ -44,31 +41,38 @@ export default ({action, speech, parameters}, event, senderId) => {
       selectedStops.forEach(stop => {
         getStopPrediction(stop.stopId)
           .then(res => sendBusPredictions(res, senderId))
-          .catch(err => console.log(err))
+          .catch(err => log(err))
       })
       break
     }
 
     case BUS_IN_PLACE: {
-      sendText(textTemplate({
-        text: 'Um momento, vou verificar.',
-        senderId
-      }))
-
       const selectedStops = selectBusStopByName(locais, busStops)
 
-      selectedStops.forEach(async function(busStop) {
-        const stopPrediction = await getStopPrediction(busStop.stopId)
+      if(selectedStops.length > 0) {
+        sendText(textTemplate({
+          text: 'Um momento, vou verificar.',
+          senderId
+        }))
 
-        if(stopPrediction.arrival.length > 1 || stopPrediction.departure.length > 1) {
-          sendBusPredictions(stopPrediction, senderId)
-        } else {
-          sendText(textTemplate({
-            text: 'Hmmm, parece que não tem mais ônibus...',
-            senderId
-          }))
-        }
-      })
+        selectedStops.forEach(async function(busStop) {
+          const stopPrediction = await getStopPrediction(busStop.stopId)
+
+          if(stopPrediction.arrival.length > 1 || stopPrediction.departure.length > 1) {
+            sendBusPredictions(stopPrediction, senderId)
+          } else {
+            sendText(textTemplate({
+              text: 'Hmmm, parece que não tem mais ônibus...',
+              senderId
+            }))
+          }
+        })
+      } else {
+        sendText(textTemplate({
+          text: 'Hmmm, por enquanto não encontrei ônibus à caminho :/',
+          senderId
+        }))
+      }
 
       break
     }
