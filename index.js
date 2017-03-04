@@ -1,13 +1,10 @@
 import express from 'express'
-import axios from 'axios'
 import bodyParser from 'body-parser'
 
 import {
   messageEvents,
   tokenVerify
 } from './app/handlers'
-
-import busStops from './data/bus-stops'
 
 const app = express()
 
@@ -24,6 +21,4 @@ app.get('/webhook/', tokenVerify)
 app.post('/webhook/', messageEvents)
 
 
-app.listen(app.get('port'), () => {
-  console.log(`App running on port ${app.get('port')}`)
-})
+app.listen(app.get('port'))

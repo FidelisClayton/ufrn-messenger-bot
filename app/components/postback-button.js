@@ -1,5 +1,5 @@
 export default ({ payload, title }) => ({
-  type: "postback",
+  type: 'postback',
   payload,
   title
 })

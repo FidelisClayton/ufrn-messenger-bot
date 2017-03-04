@@ -6,7 +6,6 @@ import {
 
 import {
   getStopPrediction,
-  sendText
 } from '../api'
 
 import {
@@ -18,12 +17,15 @@ export default event => {
   const sender = event.sender.id
 
   switch(event.postback.payload) {
-    case ONIBUS:
+    case ONIBUS: {
       // Não lembro dessa função
-      sendText(selectBus(event))
-    default:
-      const action = event.postback.payload.split("[")[0]
-      const actionData = event.postback.payload.split("[")[1].split("]")[0]
+      // sendText(selectBus(event))
+      break
+    }
+
+    default: {
+      const action = event.postback.payload.split('[')[0]
+      const actionData = event.postback.payload.split('[')[1].split(']')[0]
 
       switch(action) {
         case STOP_LIST_PAGE:
@@ -33,11 +35,12 @@ export default event => {
         case SELECT_BUS_STOP:
           getStopPrediction(actionData)
             .then(res => sendBusPredictions(res, sender))
-            .catch(err => console.log(err))
+            .catch(err => err)
           break
 
         default:
           break
       }
+    }
   }
 }

@@ -27,8 +27,6 @@ export const textRequest = (query, token = process.env.API_AI_CLIENT_TOKEN) => {
 }
 
 export const getStopPrediction = stopId => {
-    console.log("=============", stopId, "==========")
-    console.log("function: getStopPrediction")
   return axios.get(`${CITTAMOBI_ENDPOINT}/m3p/js/prediction/stop/${stopId}`)
       .then(res => res.data)
       .then(res => ({
