@@ -1,6 +1,7 @@
 import { textRequest } from '../api'
 
 import messagingEventHandler from '../messages/message-events'
+import quickReplyEventHandler from '../messages/quick-reply-events'
 import postbackEventHandler from '../messages/postback-events'
 
 export default (req, res) => {
@@ -9,14 +10,17 @@ export default (req, res) => {
   messaging_events.forEach(event => {
     let sender = event.sender.id
 
-    if(event.message && event.message.text) {
-      let text = event.message.text
+    if(event.message && event.message.text && !!!event.message.quick_reply) {
+      let { text } = event.message
 
       textRequest(text)
         .then(res => {
-          // console.log(res)
           messagingEventHandler(res, event, sender)
         })
+    }
+
+    if(event.message && event.message.quick_reply) {
+      quickReplyEventHandler(res, event, sender)
     }
 
     if(event.postback) {
