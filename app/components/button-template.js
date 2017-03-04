@@ -4,9 +4,9 @@ export default ({ senderId, text, buttons = [] }) => ({
   },
   message: {
     attachment: {
-      type: "template",
+      type: 'template',
       payload: {
-        template_type: "button",
+        template_type: 'button',
         text: text,
         buttons: buttons
       }

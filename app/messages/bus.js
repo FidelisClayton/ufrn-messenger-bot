@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 import { sendText } from '../api'
 
 import {
@@ -9,11 +7,6 @@ import {
   postbackButton,
   element
 } from '../components'
-
-import {
-  SELECT_BUS,
-  SELECT_RESTAURANT
-} from '../constants'
 
 import busStops from '../../data/bus-stops'
 
@@ -56,11 +49,11 @@ export async function sendBusStops(event, page) {
   if(Number(page) < messages.length) {
     sendText(buttonTemplate({
       senderId: event.sender.id,
-      text: "Tem outras paradas, deseja ver?",
+      text: 'Tem outras paradas, deseja ver?',
       buttons: [
         postbackButton({
           payload: `STOP_LIST_PAGE[${nextPage}]`,
-          title: "Ver mais"
+          title: 'Ver mais'
         })
       ]
     }))
@@ -69,30 +62,30 @@ export async function sendBusStops(event, page) {
 
 export async function sendBusPredictions(res, sender) {
   const { busStop, arrival, departure } = res
-  const arrivalElements = arrival.map((vehicle, index, array) => {
+  const arrivalElements = arrival.map((vehicle, index) => {
     if(index < 3) {
       return {
         title: vehicle.routeMnemonic,
-        subtitle: `${vehicle.type === "MESSAGE" ? "À caminho" : "Agendado"} - ${vehicle.serviceMnemonic} - Chegada em ${Math.round(vehicle.prediction / 60)} min.`,
+        subtitle: `${vehicle.type === 'MESSAGE' ? 'À caminho' : 'Agendado'} - ${vehicle.serviceMnemonic} - Chegada em ${Math.round(vehicle.prediction / 60)} min.`,
       }
     }
   })
 
   if(arrivalElements.length === 1)
     arrivalElements.push({
-      title: "Apenas 1 veiculo disponivel"
+      title: 'Apenas 1 veiculo disponivel'
     })
 
-  const departureElements = departure.map((vehicle, index, array) => {
+  const departureElements = departure.map((vehicle, index) => {
     if(index < 4) {
       return {
         title: vehicle.routeMnemonic,
-        subtitle: `${vehicle.type === "MESSAGE" ? "À caminho" : "Agendado"} - ${vehicle.serviceMnemonic} - Saída em ${Math.round(vehicle.prediction / 60)} min.`,
+        subtitle: `${vehicle.type === 'MESSAGE' ? 'À caminho' : 'Agendado'} - ${vehicle.serviceMnemonic} - Saída em ${Math.round(vehicle.prediction / 60)} min.`,
       }
     }
   })
 
-  let list1 = await sendText(listTemplate({
+  await sendText(listTemplate({
     senderId: sender,
     elements: [
       {
@@ -103,9 +96,9 @@ export async function sendBusPredictions(res, sender) {
     ]
   }))
 
-  let list2 = await sendText(listTemplate({
-      senderId: sender,
-      elements: departureElements.filter(element => !!element),
-      topElement: "compact"
+  await sendText(listTemplate({
+    senderId: sender,
+    elements: departureElements.filter(element => !!element),
+    topElement: 'compact'
   }))
 }

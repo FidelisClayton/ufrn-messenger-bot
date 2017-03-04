@@ -11,7 +11,6 @@ import {
 
 import {
   selectBusStopByName,
-  selectBusStopById
 } from '../helpers/selectors'
 
 import {
@@ -29,9 +28,7 @@ export default ({action, speech, parameters}, event, senderId) => {
   const { locais } = parameters
 
   switch(action) {
-    case NEXT_BUS:
-      console.log(NEXT_BUS)
-
+    case NEXT_BUS: {
       sendText(textTemplate({
         text: speech,
         senderId
@@ -39,10 +36,9 @@ export default ({action, speech, parameters}, event, senderId) => {
 
       sendBusStops(event, 0)
       break
+    }
 
-    case BUS_LOCAL:
-      console.log(BUS_LOCAL)
-
+    // case BUS_LOCAL:
       // const selectedStops = selectBusStopByName(locais, busStops)
       //
       // selectedStops.forEach(stop => {
@@ -52,11 +48,11 @@ export default ({action, speech, parameters}, event, senderId) => {
       // })
       // Não lembro dessa função
       // sendText(selectBus(event))
-      break
+      // break
 
-    case BUS_IN_PLACE:
+    case BUS_IN_PLACE: {
       sendText(textTemplate({
-        text: "Um momento, vou verificar.",
+        text: 'Um momento, vou verificar.',
         senderId
       }))
 
@@ -66,24 +62,24 @@ export default ({action, speech, parameters}, event, senderId) => {
         const stopPrediction = await getStopPrediction(busStop.stopId)
 
         if(stopPrediction.arrival.length > 1 || stopPrediction.departure.length > 1) {
-          const { arrival, departure } = stopPrediction
-
           sendBusPredictions(stopPrediction, senderId)
         } else {
-          sendText(textMessage({
-            text: "Hmmm, parece que não tem mais ônibus...",
+          sendText(textTemplate({
+            text: 'Hmmm, parece que não tem mais ônibus...',
             senderId
           }))
         }
       })
 
       break
-    default:
+    }
+    default: {
       sendText(textTemplate({
         text: speech,
         senderId
       }))
 
       break
+    }
   }
 }

@@ -1,5 +1,5 @@
-const filterArrival = service => service.predictionType === "ARRIVAL"
-const filterDeparture = service => service.predictionType === "DEPARTURE"
+const filterArrival = service => service.predictionType === 'ARRIVAL'
+const filterDeparture = service => service.predictionType === 'DEPARTURE'
 const availableServices = service => service.vehicles.length > 0
 const availableVehicles = (previous, service) => previous.concat(service.vehicles)
 
