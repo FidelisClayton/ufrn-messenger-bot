@@ -21,22 +21,38 @@ import {
 } from './bus'
 
 import {
-  textTemplate
+  textTemplate,
+  typing
 } from '../components'
 
 import busStops from '../../data/bus-stops'
 
-export default ({action, speech, parameters}, event, senderId) => {
+export default async function({action, speech, parameters}, event, senderId) {
   const { locais } = parameters
 
   switch(action) {
     case NEXT_BUS: {
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
       sendBusStops(event)
       break
     }
 
     case BUS_LOCAL: {
       const selectedStops = selectBusStopByName(locais, busStops)
+
+      await sendText(textTemplate({
+        text: 'Um momento, vou verificar.',
+        senderId
+      }))
+
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
 
       selectedStops.forEach(stop => {
         getStopPrediction(stop.stopId)
@@ -50,12 +66,17 @@ export default ({action, speech, parameters}, event, senderId) => {
       const selectedStops = selectBusStopByName(locais, busStops)
 
       if(selectedStops.length > 0) {
-        sendText(textTemplate({
+        await sendText(textTemplate({
           text: 'Um momento, vou verificar.',
           senderId
         }))
 
         selectedStops.forEach(async function(busStop) {
+          sendText(typing({
+            senderId,
+            typing: true
+          }))
+
           const stopPrediction = await getStopPrediction(busStop.stopId)
 
           if(stopPrediction.arrival.length > 1 || stopPrediction.departure.length > 1) {
