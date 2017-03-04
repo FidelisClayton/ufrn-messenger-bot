@@ -38,17 +38,16 @@ export default ({action, speech, parameters}, event, senderId) => {
       break
     }
 
-    // case BUS_LOCAL:
-      // const selectedStops = selectBusStopByName(locais, busStops)
-      //
-      // selectedStops.forEach(stop => {
-      //   getStopPrediction(busStop.stopId)
-      //     .then(res => sendBusPredictions(res, senderId))
-      //     .catch(err => console.log(err))
-      // })
-      // Não lembro dessa função
-      // sendText(selectBus(event))
-      // break
+    case BUS_LOCAL: {
+      const selectedStops = selectBusStopByName(locais, busStops)
+
+      selectedStops.forEach(stop => {
+        getStopPrediction(stop.stopId)
+          .then(res => sendBusPredictions(res, senderId))
+          .catch(err => console.log(err))
+      })
+      break
+    }
 
     case BUS_IN_PLACE: {
       sendText(textTemplate({
