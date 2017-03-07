@@ -1,6 +1,9 @@
 import log from 'better-log'
 
-import { getStopPrediction, sendText } from '../api'
+import {
+  getStopPrediction,
+  sendText
+} from '../api'
 
 import {
   sendBusStops,
@@ -10,6 +13,7 @@ import {
 import {
   REMAINING_BUS_STOPS,
   SELECT_BUS_STOP,
+  NEXT_BUS
 } from '../constants'
 
 import { typing } from '../components'
@@ -20,10 +24,21 @@ import busStops from '../../data/bus-stops'
 
 export default (res, event, senderId) => {
   const replyPayload = event.message.quick_reply.payload
+  log(event)
 
   const [action, payload] = replyPayload.split('-')
 
   switch(action) {
+    case NEXT_BUS: {
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
+      sendBusStops(event)
+      break
+    }
+
     case REMAINING_BUS_STOPS: {
       sendText(typing({
         senderId,

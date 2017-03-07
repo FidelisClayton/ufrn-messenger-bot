@@ -29,6 +29,7 @@ import busStops from '../../data/bus-stops'
 
 export default async function({action, speech, parameters}, event, senderId) {
   const { locais } = parameters
+  log(event)
 
   switch(action) {
     case NEXT_BUS: {
