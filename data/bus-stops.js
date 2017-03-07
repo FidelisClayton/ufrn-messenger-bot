@@ -8,31 +8,31 @@ export default [
   {
     title: 'DEART',
     synonyms: ['deart', 'departamento de arte', 'arte'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/zUobR3q.jpg',
     stopId: 3854783
   },
   {
     title: 'Escola de música',
     synonyms: ['escola de música', 'edm', 'música', 'musica', 'escola de musica'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/phaRlBm.png',
     stopId: 3854986
   },
   {
     title: 'Reitoria',
     synonyms: ['Reitoria', 'reitoria'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/fFybfml.jpg',
     stopId: 3855923
   },
   {
     title: 'Educação Fisica',
     synonyms: ['ed fisica 2', 'Educação Fisica', 'ed fisica', 'educacao fisica', 'EF'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/LhPqos0.png',
     stopId: 3855924
   },
   {
     title: 'RU',
     synonyms: ['RU', 'restaurante universitario', 'terminal', 'restaurante universitario'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/6RPCuQc.png',
     stopId: 3855922
   },
   {
@@ -44,43 +44,43 @@ export default [
   {
     title: 'C&T',
     synonyms: ['ECT', 'C&T', 'cet', 'Ciência e tecnologia', 'Setor 5'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/ERcv1m8.png',
     stopId: 3854791
   },
   {
     title: 'C&T',
     synonyms: ['ECT', 'C&T', 'cet', 'Ciência e tecnologia', 'Setor 5'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/GbZ1KUV.png',
     stopId: 3853330
   },
   {
     title: 'Minhocão - Inverso',
     synonyms: ['Minhocão', 'Departamento de engenharias'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/RFkoHx5.png',
     stopId: 3854792
   },
   {
     title: 'Geologia',
     synonyms: ['Geologia'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/U7wRkve.png',
     stopId: 3854793
   },
   {
     title: 'Setor II',
     synonyms: ['Setor II', 'setor 2', 'setor II', 'II'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/RRwuWEO.png',
     stopId: 3854794
   },
   {
     title: 'IMD',
     synonyms: ['IMD', 'Metropole digital', 'Metrópole digital', 'Metrópole', 'Metropole'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/jWo9vyI.png',
     stopId: 3853418
   },
   {
     title: 'Residência',
     synonyms: ['IMD', 'Metropole digital', 'Metrópole digital', 'Metrópole', 'Metropole'],
-    image: 'http://i.imgur.com/BVBsykJ.png',
+    image: 'http://i.imgur.com/jWo9vyI.png',
     stopId: 3853418
   }
 ]
