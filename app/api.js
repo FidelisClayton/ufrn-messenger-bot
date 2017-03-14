@@ -1,3 +1,4 @@
+import log from 'better-log'
 import axios from 'axios'
 
 import { groupServicesByPredictionType } from './helpers/presenters'
@@ -46,5 +47,14 @@ export const sendText = (data, token = process.env.MESSENGER_TOKEN) => {
   .catch(err => err)
 }
 
-export const getAlmoco = date => axios.get(`${RESTAURANT_ENDPOINT}/almoco${date}.json`)
-export const getJantar = date => axios.get(`${RESTAURANT_ENDPOINT}/jantar${date}.json`)
+export const getAlmoco = date => {
+  return axios.get(`${RESTAURANT_ENDPOINT}/almoco${date}.json`)
+    .then(res => {
+      return res.data
+    })
+    .catch(err => log(err))
+}
+
+export const getJantar = date =>
+  axios.get(`${RESTAURANT_ENDPOINT}/jantar${date}.json`)
+    .then(res => res.data)

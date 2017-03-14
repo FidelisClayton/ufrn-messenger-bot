@@ -9,4 +9,9 @@ export const STOP_LIST_PAGE = 'STOP_LIST_PAGE'
 export const SELECT_BUS_STOP = 'SELECT_BUS_STOP'
 export const REMAINING_BUS_STOPS = 'REMAINING_BUS_STOPS'
 
+export const USER_PICK_ALMOCO = 'USER_PICK_ALMOCO'
+export const USER_PICK_JANTAR = 'USER_PICK_JANTAR'
+export const USER_PICK_RU = 'USER_PICK_RU'
+export const USER_PICK_BUS = 'USER_PICK_BUS'
+
 export const MAX_QUICK_REPLIES = 11

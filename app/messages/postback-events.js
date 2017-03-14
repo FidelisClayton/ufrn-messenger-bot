@@ -1,6 +1,10 @@
 import log from 'better-log'
 
-import { SELECT_BUS_STOP, NEXT_BUS } from '../constants'
+import {
+  SELECT_BUS_STOP,
+  USER_PICK_BUS,
+  USER_PICK_RU
+} from '../constants'
 
 import {
   getStopPrediction,
@@ -12,6 +16,8 @@ import {
 
 import { sendText } from '../api'
 import { quickReply, quickReplyTemplate } from '../components'
+
+log.setConfig({depth: 2})
 
 export default event => {
   const sender = event.sender.id
@@ -25,11 +31,11 @@ export default event => {
         quickReplies: [
           quickReply({
             title: 'Ônibus',
-            payload: NEXT_BUS
+            payload: USER_PICK_BUS
           }),
           quickReply({
             title: 'Restaurante Universitário',
-            payload: 'RU'
+            payload: USER_PICK_RU
           })
         ]
       }))

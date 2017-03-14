@@ -3,7 +3,7 @@ import log from 'better-log'
 import {
   NEXT_BUS,
   BUS_LOCAL,
-  BUS_IN_PLACE
+  BUS_IN_PLACE,
 } from '../constants'
 
 import {
