@@ -4,6 +4,7 @@ import {
   getStopPrediction,
   sendText,
   getAlmoco,
+  getJantar,
 } from '../api'
 
 import {
@@ -77,7 +78,7 @@ export default async function(res, event, senderId) {
       }))
 
       sendBusStops(event, 10)
-        .catch(err => log(err))
+        .catch(log)
       break
     }
 
@@ -91,7 +92,7 @@ export default async function(res, event, senderId) {
 
       getStopPrediction(selectedStop.stopId)
         .then(res => sendBusPredictions(res, senderId))
-        .catch(err => log(err))
+        .catch(log)
 
       break
     }
@@ -105,10 +106,22 @@ export default async function(res, event, senderId) {
 
       getAlmoco(formatDateToRU(new Date()))
         .then(res => sendMeal(res, senderId))
-        .then(res => log(res))
-        .catch(err => log(err))
+        .then(log)
+        .catch(log)
       break
 
+    }
+
+    case USER_PICK_JANTAR: {
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
+      getJantar(formatDateToRU(new Date()))
+        .then(res => sendMeal(res, senderId))
+        .then(log)
+        .catch(log)
     }
   }
 }

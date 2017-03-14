@@ -34,11 +34,13 @@ export default event => {
             payload: USER_PICK_BUS
           }),
           quickReply({
-            title: 'Restaurante Universitário',
+            title: 'Cardápio do RU',
             payload: USER_PICK_RU
           })
         ]
       }))
+      .then(log)
+      .catch(log)
       break
     default: {
       const [action, payload] = event.postback.payload.split('-')[0]

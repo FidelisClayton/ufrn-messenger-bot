@@ -52,3 +52,5 @@ export const formatDateToRU = (date) => {
 
   return `${year}${month}${day}`
 }
+
+export const capitalizeFirstLetter = word => word.charAt(0).toUpperCase() + word.slice(1)

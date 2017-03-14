@@ -49,12 +49,11 @@ export const sendText = (data, token = process.env.MESSENGER_TOKEN) => {
 
 export const getAlmoco = date => {
   return axios.get(`${RESTAURANT_ENDPOINT}/almoco${date}.json`)
-    .then(res => {
-      return res.data
-    })
-    .catch(err => log(err))
+    .then(res => res.data)
+    .catch(err => err)
 }
 
 export const getJantar = date =>
   axios.get(`${RESTAURANT_ENDPOINT}/jantar${date}.json`)
-    .then(res => res.data)
+  .then(res => res.data)
+  .catch(err => err)

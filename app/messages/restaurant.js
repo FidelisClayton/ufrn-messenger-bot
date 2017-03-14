@@ -1,58 +1,36 @@
 import log from 'better-log'
 
-import {
-  element,
-  listTemplate,
-  textTemplate
-} from '../components'
-
-import {
-  sendText,
-} from '../api'
+import { textTemplate } from '../components'
+import { sendText } from '../api'
+import { capitalizeFirstLetter } from '../helpers/presenters'
 
 export async function sendMeal(meal, senderId) {
-  log("function: sendMeal")
+  const lineBreak = '\n'
   let mealTypes = Object.keys(meal)
-  log(mealTypes)
 
   let [proteinas, acompanhamentos, vegetariano] =
     mealTypes.map(type => {
-      return meal[type].map(item => element({
-        title: item.nome,
-        image_url: `http://www.ru.ufrn.br/icones/${item.icon}`
-      }))
+      let message = `${capitalizeFirstLetter(type)}:${lineBreak}`
+
+      meal[type].map(item => {
+        message = message + lineBreak + item.nome
+      })
+
+      return message
     })
 
   await sendText(textTemplate({
     senderId,
-    text: 'Proteínas: '
-  }))
-
-  log(await sendText(listTemplate({
-    senderId,
-    elements: proteinas,
-    topElement: 'compact'
-  })))
-
-  await sendText(textTemplate({
-    senderId,
-    text: 'Acompanhamentos: '
-  }))
-
-  await sendText(listTemplate({
-    senderId,
-    elements: acompanhamentos,
-    topElement: 'compact'
+    text: proteinas ? proteinas : 'Não encontrei proteínas pra hoje :/'
   }))
 
   await sendText(textTemplate({
     senderId,
-    text: 'Vegetariano: '
+    text: acompanhamentos ? acompanhamentos : 'Não encontrei acompanhamentos para hoje :('
   }))
 
-  await sendText(listTemplate({
+  await sendText(textTemplate({
     senderId,
-    elements: vegetariano,
-    topElement: 'compact'
+    text: vegetariano ? vegetariano : 'Hmm, não encontrei o cardápio vegetariano.'
   }))
 }
