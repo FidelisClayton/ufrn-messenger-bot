@@ -4,16 +4,19 @@ import {
   NEXT_BUS,
   BUS_LOCAL,
   BUS_IN_PLACE,
+  RESTAURANT,
+  PARAMETERS,
 } from '../constants'
 
 import {
   getStopPrediction,
-  sendText
+  sendText,
+  getAlmoco,
+  getJantar,
 } from '../api'
 
-import {
-  selectBusStopByName,
-} from '../helpers/selectors'
+import { selectBusStopByName } from '../helpers/selectors'
+import { formatDateToRU } from '../helpers/presenters'
 
 import {
   sendBusPredictions,
@@ -24,6 +27,8 @@ import {
   textTemplate,
   typing
 } from '../components'
+
+import { sendMeal } from './restaurant'
 
 import busStops from '../../data/bus-stops'
 
@@ -98,6 +103,28 @@ export default async function({action, speech, parameters}, event, senderId) {
 
       break
     }
+
+    case RESTAURANT: {
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
+      if (parameters.refeicao === PARAMETERS.refeicao.jantar) {
+        getJantar(formatDateToRU(new Date()))
+          .then(res => sendMeal(res, senderId))
+          .then(log)
+          .catch(log)
+      } else if (parameters.refeicao === PARAMETERS.refeicao.almoco) {
+        getAlmoco(formatDateToRU(new Date()))
+          .then(res => sendMeal(res, senderId))
+          .then(log)
+          .catch(log)
+      }
+
+      break
+    }
+
     default: {
       sendText(textTemplate({
         text: speech,

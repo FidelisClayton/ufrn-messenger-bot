@@ -1,4 +1,5 @@
 import log from 'better-log'
+import emoji from 'node-emoji'
 
 import { textTemplate } from '../components'
 import { sendText } from '../api'
@@ -8,29 +9,37 @@ export async function sendMeal(meal, senderId) {
   const lineBreak = '\n'
   let mealTypes = Object.keys(meal)
 
-  let [proteinas, acompanhamentos, vegetariano] =
+  let [
+    proteinas,
+    acompanhamentos,
+    vegetariano
+  ] =
     mealTypes.map(type => {
-      let message = `${capitalizeFirstLetter(type)}:${lineBreak}`
+      let titleEmoji = ''
+
+      switch(type) {
+        case 'proteinas':
+          titleEmoji = ':poultry_leg:'
+          break
+        case 'acompanhamentos':
+          titleEmoji = ':curry:'
+          break
+        case 'vegetariano':
+          titleEmoji = ':seedling:'
+          break
+      }
+
+      let message = emoji.emojify(`${lineBreak}${titleEmoji} ${capitalizeFirstLetter(type)}:`)
 
       meal[type].map(item => {
-        message = message + lineBreak + item.nome
+        message = emoji.emojify(`${message}${lineBreak}:small_blue_diamond: ${item.nome}`)
       })
 
-      return message
+      return `${message}${lineBreak}`
     })
 
   await sendText(textTemplate({
     senderId,
-    text: proteinas ? proteinas : 'Não encontrei proteínas pra hoje :/'
-  }))
-
-  await sendText(textTemplate({
-    senderId,
-    text: acompanhamentos ? acompanhamentos : 'Não encontrei acompanhamentos para hoje :('
-  }))
-
-  await sendText(textTemplate({
-    senderId,
-    text: vegetariano ? vegetariano : 'Hmm, não encontrei o cardápio vegetariano.'
+    text: `${proteinas}${acompanhamentos}${vegetariano}`
   }))
 }
