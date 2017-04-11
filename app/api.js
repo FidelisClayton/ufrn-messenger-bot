@@ -13,12 +13,13 @@ const RESTAURANT_ENDPOINT = 'http://www.ru.ufrn.br/cardapio'
 const generateRandomSessionId = () =>
   `${Math.floor(Math.random() * 100)}-${Date.now()}`
 
-export const textRequest = (query, token = process.env.API_AI_CLIENT_TOKEN) => {
+export const textRequest = (query, sessionId, token = process.env.API_AI_CLIENT_TOKEN) => {
+  console.log(sessionId)
   return axios.get(`${API_AI_ENDPOINT}/query`, {
     params: {
       query,
       lang: 'pt-br',
-      sessionId: generateRandomSessionId()
+      sessionId
     },
     headers: {
       'Authorization': `Bearer ${token}`
