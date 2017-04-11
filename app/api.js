@@ -1,3 +1,4 @@
+import log from 'better-log'
 import axios from 'axios'
 
 import { groupServicesByPredictionType } from './helpers/presenters'
@@ -7,6 +8,7 @@ import busStops from '../data/bus-stops'
 const API_AI_ENDPOINT = 'https://api.api.ai/api'
 const CITTAMOBI_ENDPOINT = 'http://api.plataforma.cittati.com.br'
 const FACEBOOK_ENDPOINT = 'https://graph.facebook.com/v2.6'
+const RESTAURANT_ENDPOINT = 'http://www.ru.ufrn.br/cardapio'
 
 const generateRandomSessionId = () =>
   `${Math.floor(Math.random() * 100)}-${Date.now()}`
@@ -44,3 +46,14 @@ export const sendText = (data, token = process.env.MESSENGER_TOKEN) => {
   .then(res => res.data)
   .catch(err => err)
 }
+
+export const getAlmoco = date => {
+  return axios.get(`${RESTAURANT_ENDPOINT}/almoco${date}.json`)
+    .then(res => res.data)
+    .catch(err => err)
+}
+
+export const getJantar = date =>
+  axios.get(`${RESTAURANT_ENDPOINT}/jantar${date}.json`)
+  .then(res => res.data)
+  .catch(err => err)

@@ -41,3 +41,16 @@ export function groupServicesByPredictionType(services) {
     departure,
   }
 }
+
+export const formatDateToRU = (date) => {
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+
+  month = month < 10 ? '0' + month : month
+  day = day < 10 ? '0' + day : day
+
+  return `${year}${month}${day}`
+}
+
+export const capitalizeFirstLetter = word => word.charAt(0).toUpperCase() + word.slice(1)

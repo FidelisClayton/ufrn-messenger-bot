@@ -2,7 +2,9 @@ import log from 'better-log'
 
 import {
   getStopPrediction,
-  sendText
+  sendText,
+  getAlmoco,
+  getJantar,
 } from '../api'
 
 import {
@@ -10,26 +12,56 @@ import {
   sendBusPredictions
 } from './bus'
 
+import { sendMeal } from './restaurant'
+
 import {
   REMAINING_BUS_STOPS,
   SELECT_BUS_STOP,
-  NEXT_BUS
+  USER_PICK_BUS,
+  USER_PICK_RU,
+  USER_PICK_ALMOCO,
+  USER_PICK_JANTAR
 } from '../constants'
 
-import { typing } from '../components'
+import {
+  typing,
+  quickReply,
+  quickReplyTemplate
+} from '../components'
 
 import { selectBusStopById } from '../helpers/selectors'
+import { formatDateToRU } from '../helpers/presenters'
 
 import busStops from '../../data/bus-stops'
 
-export default (res, event, senderId) => {
+log.setConfig({depth: 2})
+
+export default async function(res, event, senderId) {
   const replyPayload = event.message.quick_reply.payload
   log(event)
 
   const [action, payload] = replyPayload.split('-')
 
   switch(action) {
-    case NEXT_BUS: {
+    case USER_PICK_RU: {
+      sendText(quickReplyTemplate({
+        senderId,
+        text: 'Almoço ou Jantar?',
+        quickReplies: [
+          quickReply({
+            title: 'Almoço',
+            payload: USER_PICK_ALMOCO
+          }),
+          quickReply({
+            title: 'Jantar',
+            payload: USER_PICK_JANTAR
+          })
+        ]
+      }))
+      break
+    }
+
+    case USER_PICK_BUS: {
       sendText(typing({
         senderId,
         typing: true
@@ -46,7 +78,7 @@ export default (res, event, senderId) => {
       }))
 
       sendBusStops(event, 10)
-        .catch(err => log(err))
+        .catch(log)
       break
     }
 
@@ -60,7 +92,36 @@ export default (res, event, senderId) => {
 
       getStopPrediction(selectedStop.stopId)
         .then(res => sendBusPredictions(res, senderId))
-        .catch(err => log(err))
+        .catch(log)
+
+      break
+    }
+
+    case USER_PICK_ALMOCO: {
+
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
+      getAlmoco(formatDateToRU(new Date()))
+        .then(res => sendMeal(res, senderId))
+        .then(log)
+        .catch(log)
+      break
+
+    }
+
+    case USER_PICK_JANTAR: {
+      sendText(typing({
+        senderId,
+        typing: true
+      }))
+
+      getJantar(formatDateToRU(new Date()))
+        .then(res => sendMeal(res, senderId))
+        .then(log)
+        .catch(log)
     }
   }
 }
