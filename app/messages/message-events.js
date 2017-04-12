@@ -6,6 +6,8 @@ import {
   BUS_IN_PLACE,
   RESTAURANT,
   PARAMETERS,
+  USER_PICK_ALMOCO,
+  USER_PICK_JANTAR,
 } from '../constants'
 
 import {
@@ -20,12 +22,14 @@ import { formatDateToRU } from '../helpers/presenters'
 
 import {
   sendBusPredictions,
-  sendBusStops
+  sendBusStops,
 } from './bus'
 
 import {
   textTemplate,
-  typing
+  typing,
+  quickReplyTemplate,
+  quickReply,
 } from '../components'
 
 import { sendMeal } from './restaurant'
@@ -105,7 +109,7 @@ export default async function({action, speech, parameters}, event, senderId) {
     }
 
     case RESTAURANT: {
-      sendText(typing({
+      await sendText(typing({
         senderId,
         typing: true
       }))
@@ -120,7 +124,23 @@ export default async function({action, speech, parameters}, event, senderId) {
           .then(res => sendMeal(res, senderId))
           .then(log)
           .catch(log)
+      } else {
+        sendText(quickReplyTemplate({
+          senderId,
+          text: 'No Restaurante Universitário temos almoço e jantar, qual você quer consultar?',
+          quickReplies: [
+            quickReply({
+              title: 'Almoço',
+              payload: USER_PICK_ALMOCO
+            }),
+            quickReply({
+              title: 'Jantar',
+              payload: USER_PICK_JANTAR
+            })
+          ]
+        }))
       }
+
 
       break
     }
