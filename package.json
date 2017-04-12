@@ -9,7 +9,7 @@
     "start": "babel-node index.js",
     "lint": "eslint -c .eslintrc .",
     "dev": "nodemon --watch app --exec npm start",
-    "coverage": "nyc --reporter=html --reporter=text mocha --require babel-core/register --recursive app/**/__tests__/**/*.test.js"
+    "coverage": "nyc --reporter=html --reporter=text --reporter=text-lcov mocha --require babel-core/register --recursive app/**/__tests__/**/*.test.js | coveralls"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +38,7 @@
     "babel-eslint": "^6.1.2",
     "babel-watch": "^2.0.6",
     "chai": "^3.5.0",
+    "coveralls": "^2.13.0",
     "eslint": "^3.17.0",
     "istanbul": "^0.4.5",
     "nodemon": "^1.11.0",
