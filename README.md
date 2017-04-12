@@ -1,4 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/FidelisClayton/ufrn-messenger-bot/badge.svg?branch=master)](https://coveralls.io/github/FidelisClayton/ufrn-messenger-bot?branch=master)
+[![Build Status](https://travis-ci.org/FidelisClayton/ufrn-messenger-bot.svg?branch=master)](https://travis-ci.org/FidelisClayton/ufrn-messenger-bot)
 # ufrn-messenger-bot
 A Facebook Messenger Bot to consult UFRN bus stops and universitary restaurant
 
