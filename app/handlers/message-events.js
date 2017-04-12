@@ -20,7 +20,7 @@ export default (req, res) => {
     }
 
     if(event.message && event.message.quick_reply) {
-      quickReplyEventHandler(res, event, sender)
+      quickReplyEventHandler(event)
     }
 
     if(event.postback) {

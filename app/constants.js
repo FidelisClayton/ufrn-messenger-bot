@@ -6,6 +6,7 @@ export const NEXT_BUS = 'NEXT_BUS'
 export const ONIBUS = 'ONIBUS'
 export const RESTAURANT = 'RESTAURANT'
 export const STOP_LIST_PAGE = 'STOP_LIST_PAGE'
+export const GET_STARTED_PAYLOAD = 'GET_STARTED_PAYLOAD'
 
 // Quick Replies
 export const USER_PICK_ALMOCO = 'USER_PICK_ALMOCO'
