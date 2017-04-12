@@ -1,4 +1,3 @@
-import log from 'better-log'
 import axios from 'axios'
 
 import { groupServicesByPredictionType } from './helpers/presenters'
@@ -10,11 +9,7 @@ const CITTAMOBI_ENDPOINT = 'http://api.plataforma.cittati.com.br'
 const FACEBOOK_ENDPOINT = 'https://graph.facebook.com/v2.6'
 const RESTAURANT_ENDPOINT = 'http://www.ru.ufrn.br/cardapio'
 
-const generateRandomSessionId = () =>
-  `${Math.floor(Math.random() * 100)}-${Date.now()}`
-
 export const textRequest = (query, sessionId, token = process.env.API_AI_CLIENT_TOKEN) => {
-  console.log(sessionId)
   return axios.get(`${API_AI_ENDPOINT}/query`, {
     params: {
       query,

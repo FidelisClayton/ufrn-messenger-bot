@@ -37,7 +37,7 @@ export default async function(event) {
       return busActions[SELECT_BUS_STOP](senderId, payload, busStops)
 
     case USER_PICK_RU:
-      return restaurant[USER_PICK_RU](senderId)
+      return restaurantActions[USER_PICK_RU](senderId)
 
     case USER_PICK_ALMOCO:
       return restaurantActions[USER_PICK_ALMOCO](senderId)

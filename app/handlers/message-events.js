@@ -1,5 +1,4 @@
 import { textRequest } from '../api'
-import log from 'better-log'
 
 import messagingEventHandler from '../messages/message-events'
 import quickReplyEventHandler from '../messages/quick-reply-events'

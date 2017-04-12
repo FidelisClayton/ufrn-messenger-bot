@@ -1,18 +1,14 @@
-import log from 'better-log'
-
 import {
   NEXT_BUS,
   BUS_LOCAL,
   BUS_IN_PLACE,
   RESTAURANT,
-  PARAMETERS,
-  USER_PICK_ALMOCO,
-  USER_PICK_JANTAR,
 } from '../constants'
 
 import { sendText } from '../api'
 import { typing, textTemplate } from '../components'
 import busActions from '../actions/bus'
+import restaurantActions from '../actions/restaurant'
 
 import busStops from '../../data/bus-stops'
 
