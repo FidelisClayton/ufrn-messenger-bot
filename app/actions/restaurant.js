@@ -3,7 +3,7 @@ import log from 'better-log'
 import { formatDateToRU } from '../helpers/presenters'
 import { sendText, getAlmoco, getJantar } from '../api'
 import { sendMeal } from '../messages/restaurant'
-import { typing, quickReply, quickReplyTemplate } from '../components'
+import { quickReply, quickReplyTemplate } from '../components'
 
 import {
   USER_PICK_RU,

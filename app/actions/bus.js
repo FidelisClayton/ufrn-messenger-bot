@@ -2,8 +2,8 @@ import log from 'better-log'
 
 import { getStopPrediction, sendText } from '../api'
 import { sendBusStops, sendBusPredictions } from '../messages/bus'
-import { typing, quickReply, quickReplyTemplate, textTemplate } from '../components'
-import { selectBusStopByName, selectBusStopsById } from '../helpers/selectors'
+import { typing, textTemplate } from '../components'
+import { selectBusStopByName } from '../helpers/selectors'
 
 import {
   BUS_IN_PLACE,
@@ -23,7 +23,7 @@ export default {
     return sendBusStops(event, 10)
   },
 
-  [SELECT_BUS_STOP]: (senderId, payload, busStops) => {
+  [SELECT_BUS_STOP]: (senderId, payload) => {
     return getStopPrediction(payload)
       .then(res => sendBusPredictions(res, senderId))
       .catch(log)

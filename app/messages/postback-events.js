@@ -1,13 +1,10 @@
-import log from 'better-log'
-
 import {
   SELECT_BUS_STOP,
   GET_STARTED_PAYLOAD,
 } from '../constants'
 
-import { getStopPrediction, sendText } from '../api'
-import { sendBusPredictions } from './bus'
-import { quickReply, quickReplyTemplate, typing } from '../components'
+import { sendText } from '../api'
+import { typing } from '../components'
 
 import busStops from '../../data/bus-stops'
 import busActions from '../actions/bus'

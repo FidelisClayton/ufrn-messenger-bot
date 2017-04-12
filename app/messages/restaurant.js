@@ -1,4 +1,3 @@
-import log from 'better-log'
 import emoji from 'node-emoji'
 
 import { textTemplate } from '../components'
