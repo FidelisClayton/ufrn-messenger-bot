@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/FidelisClayton/ufrn-messenger-bot/badge.svg?branch=master)](https://coveralls.io/github/FidelisClayton/ufrn-messenger-bot?branch=master)
 # ufrn-messenger-bot
 A Facebook Messenger Bot to consult UFRN bus stops and universitary restaurant
 

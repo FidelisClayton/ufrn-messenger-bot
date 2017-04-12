@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests --recursive --require babel-core/register",
+    "test": "mocha --require babel-core/register --recursive app/**/__tests__/**/*.test.js",
+    "test:watch": "npm run test -- --watch",
     "start": "babel-node index.js",
     "lint": "eslint -c .eslintrc .",
-    "dev": "nodemon --watch app --exec npm start"
+    "dev": "nodemon --watch app --exec npm start",
+    "coverage": "nyc --reporter=html --reporter=text mocha --require babel-core/register --recursive app/**/__tests__/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -32,10 +34,13 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "babel-core": "^6.24.1",
     "babel-eslint": "^6.1.2",
     "babel-watch": "^2.0.6",
     "chai": "^3.5.0",
     "eslint": "^3.17.0",
-    "nodemon": "^1.11.0"
+    "istanbul": "^0.4.5",
+    "nodemon": "^1.11.0",
+    "nyc": "^10.2.0"
   }
 }
