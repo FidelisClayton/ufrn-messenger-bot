@@ -2,55 +2,35 @@ import log from 'better-log'
 
 import {
   SELECT_BUS_STOP,
-  USER_PICK_BUS,
-  USER_PICK_RU
+  GET_STARTED_PAYLOAD,
 } from '../constants'
 
-import {
-  getStopPrediction,
-} from '../api'
+import { getStopPrediction, sendText } from '../api'
+import { sendBusPredictions } from './bus'
+import { quickReply, quickReplyTemplate, typing } from '../components'
 
-import {
-  sendBusPredictions
-} from './bus'
+import busStops from '../../data/bus-stops'
+import busActions from '../actions/bus'
+import generalActions from '../actions/general'
 
-import { sendText } from '../api'
-import { quickReply, quickReplyTemplate } from '../components'
+export default async event => {
+  const senderId = event.sender.id
 
-log.setConfig({depth: 2})
-
-export default event => {
-  const sender = event.sender.id
-  log(event)
+  await sendText(typing({
+    senderId,
+    typing: true
+  }))
 
   switch(event.postback.payload) {
-    case 'GET_STARTED_PAYLOAD':
-      sendText(quickReplyTemplate({
-        senderId: sender,
-        text: 'Oi, como posso te ajudar?',
-        quickReplies: [
-          quickReply({
-            title: 'Ônibus',
-            payload: USER_PICK_BUS
-          }),
-          quickReply({
-            title: 'Cardápio do RU',
-            payload: USER_PICK_RU
-          })
-        ]
-      }))
-      .then(log)
-      .catch(log)
-      break
+    case GET_STARTED_PAYLOAD:
+      return generalActions[GET_STARTED_PAYLOAD](senderId)
+
     default: {
       const [action, payload] = event.postback.payload.split('-')[0]
 
       switch(action) {
         case SELECT_BUS_STOP:
-          getStopPrediction(payload)
-            .then(res => sendBusPredictions(res, sender))
-            .catch(err => err)
-          break
+          return busActions[SELECT_BUS_STOP](senderId, payload, busStops)
 
         default:
           break
