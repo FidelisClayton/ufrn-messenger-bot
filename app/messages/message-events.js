@@ -3,10 +3,14 @@ import {
   BUS_LOCAL,
   BUS_IN_PLACE,
   RESTAURANT,
+  UNKNOWN,
+  GET_STARTED_PAYLOAD,
 } from '../constants'
 
 import { sendText } from '../api'
 import { typing, textTemplate } from '../components'
+
+import generalActions from '../actions/general'
 import busActions from '../actions/bus'
 import restaurantActions from '../actions/restaurant'
 
@@ -32,6 +36,9 @@ export default async function({action, speech, parameters}, event, senderId) {
 
     case RESTAURANT:
       return restaurantActions[RESTAURANT](senderId, parameters)
+
+    case UNKNOWN:
+      return generalActions[GET_STARTED_PAYLOAD](senderId, speech)
 
     default:
       return sendText(textTemplate({ text: speech, senderId }))
