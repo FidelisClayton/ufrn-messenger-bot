@@ -8,10 +8,10 @@ import {
 } from '../constants'
 
 export default {
-  [GET_STARTED_PAYLOAD]: (senderId) => {
+  [GET_STARTED_PAYLOAD]: (senderId, text = 'Oi, como posso te ajudar?') => {
     return sendText(quickReplyTemplate({
       senderId,
-      text: 'Oi, como posso te ajudar?',
+      text,
       quickReplies: [
         quickReply({
           title: 'Ônibus',
